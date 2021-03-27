@@ -21,7 +21,7 @@ ion-item p {
 }
 
 ion-item .date {
-  float: right;
+  float: left;
   align-items: center;
   display: flex;
 }
@@ -56,4 +56,18 @@ ion-item ion-note.md {
 ion-footer ion-title {
   font-size: 11px;
   font-weight: normal;
+}
+.podcast_img{
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.icon_play{
+  width: 20px;
+  height: 20px;
+}
+.parent_icon_play{
+  float: right;
+  margin-right: 50px;
 }

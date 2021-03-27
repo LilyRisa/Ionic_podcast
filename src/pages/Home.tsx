@@ -13,12 +13,21 @@ import {
   useIonViewWillEnter
 } from '@ionic/react';
 import './Home.css';
+import axois from 'axios';
 
 const Home: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  useIonViewWillEnter(() => {
+  useIonViewWillEnter(async () => {
+    axois.get<Message[]>('https://adonis-webapp.herokuapp.com/episodes_api')
+    .then(response =>{
+      let resp = response.data;
+      setMessages(resp);
+    })
+    .catch(err =>{
+      setMessages([]);
+    });
     const msgs = getMessages();
     setMessages(msgs);
   });
@@ -33,7 +42,7 @@ const Home: React.FC = () => {
     <IonPage id="home-page">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
+          <IonTitle>PODCAST</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -44,7 +53,7 @@ const Home: React.FC = () => {
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">
-              Inbox
+              Podcast
             </IonTitle>
           </IonToolbar>
         </IonHeader>

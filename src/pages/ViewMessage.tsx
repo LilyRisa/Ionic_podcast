@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Message, getMessage } from '../data/messages';
+import { Message, getMessage, getMessages } from '../data/messages';
 import {
   IonBackButton,
   IonButtons,
@@ -16,12 +16,26 @@ import {
 import { personCircle } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './ViewMessage.css';
+import axois from 'axios';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 function ViewMessage() {
   const [message, setMessage] = useState<Message>();
+  const [messages, setMessages] = useState<Message[]>([]);
   const params = useParams<{ id: string }>();
 
   useIonViewWillEnter(() => {
+    axois.get<Message[]>('https://adonis-webapp.herokuapp.com/episodes_api')
+    .then(response =>{
+      let resp = response.data;
+      setMessages(resp);
+    })
+    .catch(err =>{
+      setMessages([]);
+    });
+    const msgs = getMessages();
+    setMessages(msgs);
     const msg = getMessage(parseInt(params.id, 10));
     setMessage(msg);
   });
@@ -33,44 +47,47 @@ function ViewMessage() {
           <IonButtons>
             <IonBackButton text="Inbox" defaultHref="/home"></IonBackButton>
           </IonButtons>
+          
         </IonToolbar>
       </IonHeader>
+    {messages.map(item => { 
+        if(item.id == parseInt(params.id)){
+            return <IonContent fullscreen>
+            <div className="player">
+                <div className="head">
+                  <div className="back"></div>
+                  <div className="front">
+                    <div className="avatar"><img src={item.images} style={{objectFit: 'cover'}}/></div>
+                    <div className="infos">
+                      <div className="titulo_song">{item.title}</div>
+                      <div className="duracao_song"><i className="fa fa-clock-o">
+                            Total time 45:12</i></div>
+                      <div className="tags"><span>Educativo</span><span>Galinhas</span><span>Podcast</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="timeline">
+                  {/* <div className="soundline">
 
-      <IonContent fullscreen>
-        {message ? (
-          <>
-            <IonItem>
-              <IonIcon icon={personCircle} color="primary"></IonIcon>
-              <IonLabel className="ion-text-wrap">
-                <h2>
-                  {message.fromName}
-                  <span className="date">
-                    <IonNote>{message.date}</IonNote>
-                  </span>
-                </h2>
-                <h3>
-                  To: <IonNote>Me</IonNote>
-                </h3>
-              </IonLabel>
-            </IonItem>
-
-            <div className="ion-padding">
-              <h1>{message.subject}</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            </div>
-          </>
-        ) : (
-          <div>Message not found</div>
-        )}
+                  </div> */}
+                  <div className="controllers active">
+                    {/* <div className="back"> </div>
+                    <div className="play"></div>
+                    <div className="forward"></div> */}
+                    <AudioPlayer
+    autoPlay
+    src={item.path_audio}
+    onPlay={e => console.log("onPlay")}
+    // other props here
+  />
+                  </div>
+                </div>
+                </div>
+              <div className="rotation"></div>
       </IonContent>
+        }
+    })}
+      
     </IonPage>
   );
 }

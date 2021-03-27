@@ -1,10 +1,12 @@
 import {
   IonItem,
   IonLabel,
-  IonNote
+  IonNote,
+  IonIcon
   } from '@ionic/react';
 import { Message } from '../data/messages';
 import './MessageListItem.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface MessageListItemProps {
   message: Message;
@@ -16,15 +18,18 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
       <div slot="start" className="dot dot-unread"></div>
       <IonLabel className="ion-text-wrap">
         <h2>
-          {message.fromName}
-          <span className="date">
-            <IonNote>{message.date}</IonNote>
-          </span>
+          {message.title}
+          
         </h2>
-        <h3>{message.subject}</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <span className="date">
+            <img src={message.images} className="podcast_img"/>
+          </span>
+        <p style={{paddingLeft: "40px", width: "50%"}}>
+        {message.descriptions}
         </p>
+        <div className="parent_icon_play">
+          <img src={'/assets/icon/play-button.png'} className="icon_play"/>
+        </div>
       </IonLabel>
     </IonItem>
   );
